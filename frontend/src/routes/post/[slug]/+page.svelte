@@ -107,7 +107,7 @@
 	}
 	.tag {
 		background: #1e293b;
-		color: #38bdf8;
+		color: #b3c7ff;
 		padding: 0.2rem 0.6rem;
 		border-radius: 9999px;
 		font-size: 0.75rem;
@@ -126,7 +126,7 @@
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 	}
 	:global(.markdown-body pre) {
-		background: #1e293b;
+		background: #23262f;
 		padding: 1.5rem;
 		border-radius: 0.75rem;
 		overflow-x: auto;

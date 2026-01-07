@@ -26,7 +26,7 @@
 		gap: 2rem;
 	}
 	.post-card {
-		background: #1e293b;
+		background:#23262f;
 		border-radius: 1.25rem;
 		border: 1px solid #334155;
 		text-decoration: none;
@@ -37,7 +37,7 @@
 	}
 	.post-card:hover {
 		transform: translateY(-4px);
-		border-color: #38bdf8;
+		border-color: #b3c7ff;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
 	}
     .card-content {
@@ -57,7 +57,7 @@
 	.date {
         display: block;
 		font-size: 0.875rem;
-		color: #38bdf8;
+		color: #b3c7ff;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
