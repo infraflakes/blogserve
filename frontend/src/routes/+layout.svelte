@@ -23,7 +23,7 @@
 <style>
 	:global(body) {
 		font-family: 'Inter', system-ui, -apple-system, sans-serif;
-		background: #0f172a;
+		background: #17181c;
 		color: #f8fafc;
 		margin: 0;
 		line-height: 1.5;
@@ -37,7 +37,7 @@
 	}
 
 	nav {
-		background: rgba(15, 23, 42, 0.8);
+		background: rgba(35, 38, 47, 0.8);
 		backdrop-filter: blur(8px);
 		border-bottom: 1px solid #1e293b;
 		padding: 1rem 0;
@@ -50,7 +50,8 @@
 		font-size: 1.5rem;
 		font-weight: 800;
 		text-decoration: none;
-		background: linear-gradient(to right, #38bdf8, #818cf8);
+		background: #b3c7ff;
+		/* background: linear-gradient(to right, #38bdf8, #818cf8); */
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}

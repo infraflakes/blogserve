@@ -5,3 +5,4 @@ blogserve
 frontend/dist/
 dist/
 node_modules/
+example_data/

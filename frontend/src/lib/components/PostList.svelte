@@ -68,8 +68,8 @@
         flex-wrap: wrap;
 	}
 	.tag {
-		background: #0f172a;
-        color: #64748b;
+		background:#17181c
+    color: #64748b;
 		padding: 0.25rem 0.75rem;
 		border-radius: 0.5rem;
         font-size: 0.75rem;
