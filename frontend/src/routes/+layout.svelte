@@ -10,6 +10,7 @@
 	</nav>
 
 	<main class="container">
+		<div class="page-spacer"></div>
 		{@render children()}
 	</main>
 
@@ -36,9 +37,13 @@
 		padding: 0 1.5rem;
 	}
 
+	.page-spacer {
+		height: 8rem;
+	}
+
 	nav {
-		background: rgba(35, 38, 47, 0.8);
-		backdrop-filter: blur(8px);
+		background: rgba(23, 24, 28, 0.8);
+		backdrop-filter: blur(12px);
 		border-bottom: 1px solid #1e293b;
 		padding: 1rem 0;
 		position: sticky;
@@ -47,17 +52,13 @@
 	}
 
 	.logo {
-		font-size: 1.5rem;
+		font-size: 1.75rem;
 		font-weight: 800;
 		text-decoration: none;
-		background: #b3c7ff;
-		/* background: linear-gradient(to right, #38bdf8, #818cf8); */
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
+		color: #b3c7ff;
 	}
 
 	main {
-		padding-top: 3rem;
 		padding-bottom: 5rem;
 		min-height: 80vh;
 	}

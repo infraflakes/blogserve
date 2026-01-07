@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"sort"
 )
 
 type PostMetadata struct {
@@ -38,6 +39,16 @@ func ScanDirectory(dir string) ([]Post, error) {
 			posts = append(posts, post)
 		}
 	}
+
+	// Sort posts by date (newest first)
+	sort.Slice(posts, func(i, j int) bool {
+		// If dates are equal, sort by slug
+		if posts[i].Metadata.Date == posts[j].Metadata.Date {
+			return posts[i].Slug < posts[j].Slug
+		}
+		// Descending order for newest first
+		return posts[i].Metadata.Date > posts[j].Metadata.Date
+	})
 
 	return posts, nil
 }
