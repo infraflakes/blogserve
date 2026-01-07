@@ -1,0 +1,7 @@
+result
+.direnv/
+*.log
+blogserve
+frontend/dist/
+dist/
+node_modules/
