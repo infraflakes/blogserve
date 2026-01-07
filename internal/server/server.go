@@ -1,7 +1,7 @@
 package server
 
 import (
-	"blogserve/backend/internal/blog"
+	"blogserve/internal/blog"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -29,15 +29,17 @@ func (s *Server) Start() error {
 	mux.HandleFunc("/api/reload", s.handleReload)
 
 	// Serve assets from the blog directory
-	// Each post directory has an "assets" sub-directory
-	// We want to serve /assets/post-slug/image.png -> blogDir/post-slug/assets/image.png
-	// For simplicity, we'll just serve the whole blogDir under /data/ and let frontend handle paths,
-	// OR we can make a custom handler. Let's start with a generic /data/ for now.
 	mux.Handle("/data/", http.StripPrefix("/data/", http.FileServer(http.Dir(s.BlogDir))))
 
-	// Static files and frontend will be added later
-	// For now, let's assume we serve them from a 'dist' folder if it exists
-	// mux.Handle("/", http.FileServer(http.Dir("./frontend/dist")))
+	// Frontend handler
+	feHandler := s.getFrontendHandler()
+
+	// Catch-all handler for SPA and static files
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// If it's a file that exists, serve it
+		// Otherwise, serve index.html
+		feHandler.ServeHTTP(w, r)
+	})
 
 	fmt.Printf("Server listening on http://localhost:%d\n", s.Port)
 	return http.ListenAndServe(fmt.Sprintf(":%d", s.Port), mux)

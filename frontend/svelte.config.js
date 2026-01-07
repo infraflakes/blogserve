@@ -7,7 +7,20 @@ const config = {
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 
-	kit: { adapter: adapter() }
+	kit: {
+		adapter: adapter({
+			pages: 'dist',
+			assets: 'dist',
+			fallback: 'index.html',
+			precompress: false,
+			strict: true
+		}),
+		prerender: {
+			handleHttpError: 'warn',
+			handleMissingId: 'warn',
+			handleUnseenRoutes: 'ignore'
+		}
+	}
 };
 
 export default config;

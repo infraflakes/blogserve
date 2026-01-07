@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"blogserve/backend/internal/blog"
-	"blogserve/backend/internal/server"
+	"blogserve/internal/blog"
+	"blogserve/internal/server"
 	"fmt"
 	"os"
 	"path/filepath"
