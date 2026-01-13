@@ -7,7 +7,7 @@
 
 	async function fetchPosts() {
 		try {
-			const res = await fetch('http://localhost:8080/api/posts');
+			const res = await fetch('/api/posts');
 			posts = await res.json();
 		} catch (e) {
 			console.error('Failed to fetch posts', e);
@@ -19,7 +19,7 @@
 	onMount(() => {
 		fetchPosts();
 
-		const eventSource = new EventSource('http://localhost:8080/api/reload');
+		const eventSource = new EventSource('/api/reload');
 		eventSource.onmessage = (event) => {
 			if (event.data === 'reload') {
 				fetchPosts();

@@ -9,7 +9,7 @@
 
 	async function fetchPost() {
 		try {
-			const res = await fetch('http://localhost:8080/api/posts');
+			const res = await fetch('/api/posts');
 			const posts = await res.json();
 			post = posts.find((p) => p.slug === slug);
 		} catch (e) {
@@ -22,7 +22,7 @@
 	onMount(() => {
 		fetchPost();
 
-		const eventSource = new EventSource('http://localhost:8080/api/reload');
+		const eventSource = new EventSource('/api/reload');
 		eventSource.onmessage = (event) => {
 			if (event.data === 'reload') {
 				fetchPost();
@@ -43,7 +43,7 @@
 		images.forEach((img) => {
 			const src = img.getAttribute('src');
 			if (src && !src.startsWith('http') && !src.startsWith('/')) {
-				img.setAttribute('src', `http://localhost:8080/data/${post.slug}/${src}`);
+				img.setAttribute('src', `/data/${post.slug}/${src}`);
 			}
 		});
 
