@@ -3,11 +3,13 @@ package blog
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"sort"
 )
 
+// PostMetadata represents the metadata of a blog post, typically stored in a JSON file.
 type PostMetadata struct {
 	Title       string   `json:"title"`
 	Date        string   `json:"date"`
@@ -15,12 +17,16 @@ type PostMetadata struct {
 	Description string   `json:"description"`
 }
 
+// Post represents a full blog post, including its slug, content, and metadata.
 type Post struct {
 	Slug     string       `json:"slug"`
 	Content  string       `json:"content"`
 	Metadata PostMetadata `json:"metadata"`
 }
 
+// ScanDirectory scans the given directory for blog posts.
+// A blog post is identified by a subdirectory containing exactly one markdown file
+// and optionally one JSON file for metadata.
 func ScanDirectory(dir string) ([]Post, error) {
 	var posts []Post
 
@@ -37,7 +43,7 @@ func ScanDirectory(dir string) ([]Post, error) {
 		postDir := filepath.Join(dir, entry.Name())
 		post, err := readPost(postDir, entry.Name())
 		if err != nil {
-			// Skip invalid posts but log the error or handle it as needed
+			slog.Warn("Skipping invalid post directory", "dir", postDir, "error", err)
 			continue
 		}
 		posts = append(posts, post)
@@ -56,6 +62,8 @@ func ScanDirectory(dir string) ([]Post, error) {
 	return posts, nil
 }
 
+// readPost reads a single blog post from the given directory.
+// It ensures there is exactly one markdown file and at most one JSON file.
 func readPost(dir, slug string) (Post, error) {
 	var post Post
 	post.Slug = slug

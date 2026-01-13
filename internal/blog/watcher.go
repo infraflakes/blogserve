@@ -1,17 +1,21 @@
 package blog
 
 import (
-	"log"
+	"log/slog"
 	"os"
 	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
 )
 
+// WatchDirectory watches the given directory and its subdirectories for changes.
+// When a change is detected, it calls the onChange callback.
+// It uses fsnotify to monitor file system events.
 func WatchDirectory(dir string, onChange func()) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("Failed to create watcher", "error", err)
+		os.Exit(1)
 	}
 	defer watcher.Close()
 
@@ -27,14 +31,14 @@ func WatchDirectory(dir string, onChange func()) {
 					event.Op&fsnotify.Create == fsnotify.Create ||
 					event.Op&fsnotify.Remove == fsnotify.Remove ||
 					event.Op&fsnotify.Rename == fsnotify.Rename {
-					log.Println("modified file:", event.Name)
+					slog.Info("File modified", "path", event.Name, "op", event.Op.String())
 					onChange()
 				}
 			case err, ok := <-watcher.Errors:
 				if !ok {
 					return
 				}
-				log.Println("error:", err)
+				slog.Error("Watcher error", "error", err)
 			}
 		}
 	}()
@@ -50,7 +54,8 @@ func WatchDirectory(dir string, onChange func()) {
 		return nil
 	})
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("Failed to walk directory for watching", "dir", dir, "error", err)
+		os.Exit(1)
 	}
 	<-done
 }

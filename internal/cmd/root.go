@@ -1,9 +1,10 @@
+// Package cmd implements the command-line interface for blogserve.
 package cmd
 
 import (
 	"blogserve/internal/blog"
 	"blogserve/internal/server"
-	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 
@@ -29,15 +30,17 @@ var rootCmd = &cobra.Command{
 		})
 
 		if err := s.Start(); err != nil {
-			fmt.Fprintf(os.Stderr, "Error starting server: %v\n", err)
+			slog.Error("Failed to start server", "error", err)
 			os.Exit(1)
 		}
 	},
 }
 
+// Execute adds all child commands to the root command and sets flags appropriately.
+// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		slog.Error("Cobra execution error", "error", err)
 		os.Exit(1)
 	}
 }

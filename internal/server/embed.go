@@ -8,9 +8,14 @@ import (
 	"path/filepath"
 )
 
-// Global embed FS
+// FrontendFS is a global embedded filesystem containing the built frontend.
+// It is expected to be populated by the main package.
 var FrontendFS embed.FS
 
+// getFrontendHandler returns an http.Handler that serves the frontend.
+// It tries to serve from the embedded FrontendFS first, falling back to the local
+// "frontend/dist" directory if the embedded FS is missing or empty.
+// It includes SPA routing logic: if a file is not found, it serves index.html.
 func (s *Server) getFrontendHandler() http.Handler {
 	dist, err := fs.Sub(FrontendFS, "frontend/dist")
 	var root fs.FS
