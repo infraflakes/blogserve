@@ -2,6 +2,7 @@ package blog
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
@@ -35,9 +36,11 @@ func ScanDirectory(dir string) ([]Post, error) {
 
 		postDir := filepath.Join(dir, entry.Name())
 		post, err := readPost(postDir, entry.Name())
-		if err == nil {
-			posts = append(posts, post)
+		if err != nil {
+			// Skip invalid posts but log the error or handle it as needed
+			continue
 		}
+		posts = append(posts, post)
 	}
 
 	// Sort posts by date (newest first)
@@ -57,26 +60,54 @@ func readPost(dir, slug string) (Post, error) {
 	var post Post
 	post.Slug = slug
 
-	// Read markdown content
-	mdPath := filepath.Join(dir, slug+".md")
-	content, err := os.ReadFile(mdPath)
+	entries, err := os.ReadDir(dir)
 	if err != nil {
-		// Try content.md if slug.md doesn't exist
-		mdPath = filepath.Join(dir, "content.md")
-		content, err = os.ReadFile(mdPath)
-		if err != nil {
-			return post, err
+		return post, err
+	}
+
+	var mdFiles []string
+	var jsonFiles []string
+
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
 		}
+		ext := filepath.Ext(entry.Name())
+		if ext == ".md" {
+			mdFiles = append(mdFiles, entry.Name())
+		} else if ext == ".json" {
+			jsonFiles = append(jsonFiles, entry.Name())
+		}
+	}
+
+	// Enforce exactly one markdown file
+	if len(mdFiles) == 0 {
+		return post, fmt.Errorf("no markdown file found in %s", dir)
+	}
+	if len(mdFiles) > 1 {
+		return post, fmt.Errorf("multiple markdown files found in %s: %v", dir, mdFiles)
+	}
+
+	// Enforce at most one metadata file
+	if len(jsonFiles) > 1 {
+		return post, fmt.Errorf("multiple json files found in %s: %v", dir, jsonFiles)
+	}
+
+	// Read markdown content
+	content, err := os.ReadFile(filepath.Join(dir, mdFiles[0]))
+	if err != nil {
+		return post, err
 	}
 	post.Content = string(content)
 
-	// Read metadata
-	metaPath := filepath.Join(dir, "metadata.json")
-	metaFile, err := os.ReadFile(metaPath)
-	if err == nil {
-		var meta PostMetadata
-		if err := json.Unmarshal(metaFile, &meta); err == nil {
-			post.Metadata = meta
+	// Read metadata if exists
+	if len(jsonFiles) == 1 {
+		metaFile, err := os.ReadFile(filepath.Join(dir, jsonFiles[0]))
+		if err == nil {
+			var meta PostMetadata
+			if err := json.Unmarshal(metaFile, &meta); err == nil {
+				post.Metadata = meta
+			}
 		}
 	}
 
