@@ -1,13 +1,18 @@
 <script>
+	import '../app.css';
 	let { children } = $props();
 </script>
 
 <div class="app">
-	<nav>
+	<header class="navbar">
 		<div class="container">
 			<a href="/" class="logo">blogserve</a>
+			<nav class="nav-links">
+				<a href="/" class="nav-link">Blog</a>
+				<!-- Future links: Portfolio, Contact, etc. -->
+			</nav>
 		</div>
-	</nav>
+	</header>
 
 	<main class="container">
 		<div class="page-spacer"></div>
@@ -22,30 +27,11 @@
 </div>
 
 <style>
-	:global(body) {
-		font-family: 'Inter', system-ui, -apple-system, sans-serif;
-		background: #17181c;
-		color: #f8fafc;
-		margin: 0;
-		line-height: 1.5;
-		-webkit-font-smoothing: antialiased;
-	}
-
-	.container {
-		max-width: 900px;
-		margin: 0 auto;
-		padding: 0 1.5rem;
-	}
-
-	.page-spacer {
-		height: 8rem;
-	}
-
-	nav {
-		background: rgba(23, 24, 28, 0.8);
+	.navbar {
+		background: rgba(10, 11, 16, 0.8);
 		backdrop-filter: blur(12px);
-		border-bottom: 1px solid #1e293b;
-		padding: 1rem 0;
+		border-bottom: 1px solid var(--border);
+		padding: var(--space-md) 0;
 		position: sticky;
 		top: 0;
 		z-index: 10;
@@ -54,19 +40,32 @@
 	.logo {
 		font-size: 1.75rem;
 		font-weight: 800;
-		text-decoration: none;
-		color: #b3c7ff;
+		color: var(--logo-color);
 	}
 
-	main {
-		padding-bottom: 5rem;
-		min-height: 80vh;
+	.nav-links {
+		display: inline-flex;
+		gap: var(--space-md);
+		margin-left: var(--space-xl);
+	}
+
+	.nav-link {
+		color: var(--text-secondary);
+		font-weight: 600;
+	}
+
+	.nav-link:hover {
+		color: var(--accent);
+	}
+
+	.page-spacer {
+		height: 6rem;
 	}
 
 	footer {
-		border-top: 1px solid #1e293b;
-		padding: 3rem 0;
-		color: #64748b;
+		border-top: 1px solid var(--border);
+		padding: var(--space-xl) 0;
+		color: var(--text-muted);
 		text-align: center;
 		font-size: 0.875rem;
 	}

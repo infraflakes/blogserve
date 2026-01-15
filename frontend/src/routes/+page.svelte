@@ -1,33 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import PostList from '$lib/components/PostList.svelte';
-
-	let posts = $state([]);
-	let loading = $state(true);
-
-	async function fetchPosts() {
-		try {
-			const res = await fetch('/api/posts');
-			posts = await res.json();
-		} catch (e) {
-			console.error('Failed to fetch posts', e);
-		} finally {
-			loading = false;
-		}
-	}
-
-	onMount(() => {
-		fetchPosts();
-
-		const eventSource = new EventSource('/api/reload');
-		eventSource.onmessage = (event) => {
-			if (event.data === 'reload') {
-				fetchPosts();
-			}
-		};
-
-		return () => eventSource.close();
-	});
+	import { postsState } from '$lib/posts.svelte';
 </script>
 
 <svelte:head>
@@ -35,13 +8,17 @@
 	<meta name="description" content="A fast and simple blog engine" />
 </svelte:head>
 
-{#if loading}
+{#if postsState.loading}
 	<div class="loading">
-        <div class="spinner"></div>
-        <p>Fetching your stories...</p>
-    </div>
+		<div class="spinner"></div>
+		<p>Fetching your stories...</p>
+	</div>
+{:else if postsState.error}
+	<div class="error-state">
+		<p>Failed to load posts: {postsState.error}</p>
+	</div>
 {:else}
-	<PostList {posts} />
+	<PostList posts={postsState.posts} />
 {/if}
 
 <style>
@@ -50,19 +27,26 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		height: 50vh;
-		color: #64748b;
+		height: 40vh;
+		color: var(--text-muted);
 	}
-    .spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid #1e293b;
-        border-top-color: #38bdf8;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 1rem;
-    }
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
+	.spinner {
+		width: 40px;
+		height: 40px;
+		border: 3px solid var(--border);
+		border-top-color: var(--accent);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin-bottom: var(--space-md);
+	}
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	.error-state {
+		text-align: center;
+		color: #ef4444;
+		padding: var(--space-xl);
+	}
 </style>

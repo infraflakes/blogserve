@@ -45,4 +45,3 @@ func (s *Server) getFrontendHandler() http.Handler {
 		fsServer.ServeHTTP(w, r)
 	})
 }
-
