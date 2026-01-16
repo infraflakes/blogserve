@@ -17,13 +17,35 @@ var FrontendFS embed.FS
 // "frontend/dist" directory if the embedded FS is missing or empty.
 // It includes SPA routing logic: if a file is not found, it serves index.html.
 func (s *Server) getFrontendHandler() http.Handler {
-	dist, err := fs.Sub(FrontendFS, "frontend/dist")
 	var root fs.FS
-	if err != nil {
-		// Fallback to local disk
-		root = os.DirFS("./frontend/dist")
+
+	if s.FrontendFS != nil {
+		root = s.FrontendFS
 	} else {
-		root = dist
+		// Try embedded FS
+		dist, err := fs.Sub(FrontendFS, "frontend/dist")
+		if err == nil {
+			// Check if it's actually populated
+			if _, err := fs.ReadDir(dist, "."); err == nil {
+				root = dist
+			}
+		}
+
+		if root == nil {
+			// Fallback to local disk. Try a few common locations.
+			paths := []string{"./frontend/dist", "../../frontend/dist", "../frontend/dist"}
+			for _, p := range paths {
+				if _, err := os.Stat(p); err == nil {
+					root = os.DirFS(p)
+					break
+				}
+			}
+		}
+	}
+
+	if root == nil {
+		// Final fallback (might still fail, but better than nil)
+		root = os.DirFS("./frontend/dist")
 	}
 
 	fsServer := http.FileServer(http.FS(root))

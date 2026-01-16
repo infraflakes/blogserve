@@ -4,6 +4,7 @@ import (
 	"blogserve/internal/blog"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"log/slog"
 	"net/http"
 	"time"
@@ -11,9 +12,10 @@ import (
 
 // Server represents the blog's web server.
 type Server struct {
-	BlogDir string
-	Port    int
-	reload  chan bool
+	BlogDir    string
+	Port       int
+	FrontendFS fs.FS
+	reload     chan bool
 }
 
 // NewServer creates a new Server instance with the specified blog directory and port.

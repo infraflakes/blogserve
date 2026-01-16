@@ -53,7 +53,6 @@ clean:
 	rm -f $(BINARY_NAME)
 	rm -rf $(NIX_BUILD)
 	rm -rf $(FRONTEND_DIR)/dist
-	rm -rf $(FRONTEND_DIR)/.svelte-kit
 
 install: build
 	@echo "Installing $(BINARY_NAME) to $(shell $(GO_CMD) env GOPATH)/bin..."

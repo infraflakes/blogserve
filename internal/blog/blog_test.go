@@ -66,3 +66,45 @@ func TestReadPost(t *testing.T) {
 		}
 	})
 }
+
+func TestScanDirectory(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "scantest")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Create a few post directories
+	posts := []struct {
+		slug string
+		date string
+	}{
+		{"old-post", "2023-01-01"},
+		{"new-post", "2024-01-01"},
+		{"mid-post", "2023-06-01"},
+	}
+
+	for _, p := range posts {
+		dir := filepath.Join(tempDir, p.slug)
+		os.Mkdir(dir, 0755)
+		os.WriteFile(filepath.Join(dir, "content.md"), []byte("content"), 0644)
+		os.WriteFile(filepath.Join(dir, "meta.json"), []byte(`{"date": "`+p.date+`"}`), 0644)
+	}
+
+	scanned, err := ScanDirectory(tempDir)
+	if err != nil {
+		t.Fatalf("ScanDirectory failed: %v", err)
+	}
+
+	if len(scanned) != 3 {
+		t.Errorf("expected 3 posts, got %d", len(scanned))
+	}
+
+	// Verify sorting (newest first)
+	if scanned[0].Slug != "new-post" {
+		t.Errorf("expected first post to be new-post, got %s", scanned[0].Slug)
+	}
+	if scanned[2].Slug != "old-post" {
+		t.Errorf("expected last post to be old-post, got %s", scanned[2].Slug)
+	}
+}
