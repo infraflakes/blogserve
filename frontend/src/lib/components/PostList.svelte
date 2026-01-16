@@ -22,6 +22,7 @@
 <style>
 	.post-list {
 		display: grid;
+		grid-template-columns: 20fr;
 		gap: var(--space-lg);
 	}
 	.post-card {

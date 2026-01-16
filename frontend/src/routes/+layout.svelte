@@ -27,6 +27,13 @@
 </div>
 
 <style>
+	.app {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		width: 100%;
+	}
+
 	.navbar {
 		background: rgba(10, 11, 16, 0.8);
 		backdrop-filter: blur(12px);
@@ -35,6 +42,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 10;
+		width: 100%;
 	}
 
 	.logo {
@@ -62,11 +70,18 @@
 		height: 6rem;
 	}
 
+	main {
+		flex-grow: 1;
+		width: 100%;
+		padding-bottom: var(--space-xl);
+	}
+
 	footer {
 		border-top: 1px solid var(--border);
-		padding: var(--space-xl) 0;
+		padding: var(--space-lg) 0;
 		color: var(--text-muted);
 		text-align: center;
 		font-size: 0.875rem;
+		width: 100%;
 	}
 </style>
