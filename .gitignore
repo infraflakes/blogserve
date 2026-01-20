@@ -3,6 +3,7 @@ result
 *.log
 blogserve
 frontend/dist/
+frontend/.svelte-kit/
 dist/
 node_modules/
 example_data/

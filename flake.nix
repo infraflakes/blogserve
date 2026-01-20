@@ -15,6 +15,7 @@
         golangci-lint
         gnumake
         bun
+        biome
       ];
       shellHook = ''
         go env -w GOPATH=$HOME/.local/share/go

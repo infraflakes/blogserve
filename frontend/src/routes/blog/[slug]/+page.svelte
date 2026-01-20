@@ -1,29 +1,29 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { marked } from 'marked';
-	import { postsState } from '$lib/posts.svelte';
+import { page } from '$app/state';
+import { marked } from 'marked';
+import { postsState } from '$lib/posts.svelte';
 
-	let post = $derived(postsState.getPost(page.params.slug));
+let post = $derived(postsState.getPost(page.params.slug));
 
-	let htmlContent = $derived(post ? marked.parse(post.content || '') : '');
+let htmlContent = $derived(post ? marked.parse(post.content || '') : '');
 
-	function processHtml(html: string) {
-		if (typeof document === 'undefined' || !post) return html;
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(html, 'text/html');
-		const images = doc.querySelectorAll('img');
+function processHtml(html: string) {
+  if (typeof document === 'undefined' || !post) return html;
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const images = doc.querySelectorAll('img');
 
-		images.forEach((img) => {
-			const src = img.getAttribute('src');
-			if (src && !src.startsWith('http') && !src.startsWith('/')) {
-				img.setAttribute('src', `/data/${post.slug}/${src}`);
-			}
-		});
+  images.forEach((img) => {
+    const src = img.getAttribute('src');
+    if (src && !src.startsWith('http') && !src.startsWith('/')) {
+      img.setAttribute('src', `/data/${post.slug}/${src}`);
+    }
+  });
 
-		return doc.body.innerHTML;
-	}
+  return doc.body.innerHTML;
+}
 
-	let processedHtml = $derived(processHtml(htmlContent));
+let processedHtml = $derived(processHtml(htmlContent));
 </script>
 
 <svelte:head>

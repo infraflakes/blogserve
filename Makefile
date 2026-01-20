@@ -1,5 +1,3 @@
-# Makefile for srn-coreutils
-
 # Use git describe to get a version string.
 # Example: v1.0.0-3-g1234567
 # Fallback to 'dev' if not in a git repository.
@@ -40,12 +38,12 @@ run:
 
 fmt:
 	@echo "Formatting code..."
-	$(GO_CMD) fmt ./...
 	cd $(FRONTEND_DIR) && $(BUN_CMD) run format
+	$(GO_CMD) fmt ./...
 
 lint:
-	golangci-lint run ./...
 	cd $(FRONTEND_DIR) && $(BUN_CMD) run lint
+	golangci-lint run ./...
 
 clean:
 	@echo "Cleaning..."
@@ -53,6 +51,7 @@ clean:
 	rm -f $(BINARY_NAME)
 	rm -rf $(NIX_BUILD)
 	rm -rf $(FRONTEND_DIR)/dist
+	rm -rf $(FRONTEND_DIR)/.svelte-kit
 
 install: build
 	@echo "Installing $(BINARY_NAME) to $(shell $(GO_CMD) env GOPATH)/bin..."

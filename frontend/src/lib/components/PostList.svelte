@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { posts } = $props();
+let { posts } = $props();
 </script>
 
 <div class="post-list">

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PostList from '$lib/components/PostList.svelte';
-	import { postsState } from '$lib/posts.svelte';
+import PostList from '$lib/components/PostList.svelte';
+import { postsState } from '$lib/posts.svelte';
 </script>
 
 <svelte:head>
