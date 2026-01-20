@@ -1,4 +1,4 @@
-import { onMount } from 'svelte';
+// No longer needed: import { onMount } from 'svelte';
 
 export interface PostMetadata {
   title: string;
@@ -29,8 +29,8 @@ class PostsState {
       const res = await fetch('/api/posts');
       if (!res.ok) throw new Error('Failed to fetch posts');
       this.posts = await res.json();
-    } catch (e: any) {
-      this.error = e.message;
+    } catch (e: unknown) {
+      this.error = e instanceof Error ? e.message : String(e);
       console.error('Error fetching posts:', e);
     } finally {
       this.loading = false;

@@ -1,6 +1,7 @@
 <script>
 import '../app.css';
-let { children } = $props();
+// biome-ignore lint/correctness/noUnusedVariables: used in template
+const { children } = $props();
 </script>
 
 <div class="app">

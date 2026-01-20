@@ -1,11 +1,11 @@
 <script lang="ts">
-import { page } from '$app/state';
 import { marked } from 'marked';
+import { page } from '$app/state';
 import { postsState } from '$lib/posts.svelte';
 
-let post = $derived(postsState.getPost(page.params.slug));
+const post = $derived(postsState.getPost(page.params.slug));
 
-let htmlContent = $derived(post ? marked.parse(post.content || '') : '');
+const htmlContent = $derived(post ? marked.parse(post.content || '') : '');
 
 function processHtml(html: string) {
   if (typeof document === 'undefined' || !post) return html;
@@ -23,7 +23,8 @@ function processHtml(html: string) {
   return doc.body.innerHTML;
 }
 
-let processedHtml = $derived(processHtml(htmlContent));
+// biome-ignore lint/correctness/noUnusedVariables: used in template
+const processedHtml = $derived(processHtml(htmlContent));
 </script>
 
 <svelte:head>

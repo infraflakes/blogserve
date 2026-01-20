@@ -1,5 +1,7 @@
 <script lang="ts">
+// biome-ignore lint/correctness/noUnusedImports: used in template
 import PostList from '$lib/components/PostList.svelte';
+// biome-ignore lint/correctness/noUnusedImports: used in template
 import { postsState } from '$lib/posts.svelte';
 </script>
 

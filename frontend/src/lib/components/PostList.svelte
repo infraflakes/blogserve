@@ -1,5 +1,6 @@
 <script lang="ts">
-let { posts } = $props();
+// biome-ignore lint/correctness/noUnusedVariables: used in template
+const { posts } = $props();
 </script>
 
 <div class="post-list">
