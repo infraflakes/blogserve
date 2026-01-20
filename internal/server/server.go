@@ -81,7 +81,7 @@ func (s *Server) handleReload(w http.ResponseWriter, r *http.Request) {
 	for {
 		select {
 		case <-s.reload:
-			fmt.Fprintf(w, "data: reload\n\n")
+			_, _ = fmt.Fprintf(w, "data: reload\n\n")
 			flusher.Flush()
 		case <-r.Context().Done():
 			return
@@ -109,5 +109,5 @@ func (s *Server) handleGetPosts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(posts)
+	_ = json.NewEncoder(w).Encode(posts)
 }

@@ -80,10 +80,10 @@ func readPost(dir, slug string) (Post, error) {
 		if entry.IsDir() {
 			continue
 		}
-		ext := filepath.Ext(entry.Name())
-		if ext == ".md" {
+		switch ext := filepath.Ext(entry.Name()); ext {
+		case ".md":
 			mdFiles = append(mdFiles, entry.Name())
-		} else if ext == ".json" {
+		case ".json":
 			jsonFiles = append(jsonFiles, entry.Name())
 		}
 	}

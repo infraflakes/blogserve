@@ -17,7 +17,7 @@ func WatchDirectory(dir string, onChange func()) {
 		slog.Error("Failed to create watcher", "error", err)
 		os.Exit(1)
 	}
-	defer watcher.Close()
+	defer func() { _ = watcher.Close() }()
 
 	done := make(chan bool)
 	go func() {

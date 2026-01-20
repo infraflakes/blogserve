@@ -58,13 +58,17 @@ func TestHandleGetPosts(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			defer os.RemoveAll(tempDir)
+			defer func() { _ = os.RemoveAll(tempDir) }()
 
 			for dir, files := range tt.posts {
 				postPath := filepath.Join(tempDir, dir)
-				os.MkdirAll(postPath, 0755)
+				if err := os.MkdirAll(postPath, 0755); err != nil {
+					t.Fatal(err)
+				}
 				for name, content := range files {
-					os.WriteFile(filepath.Join(postPath, name), []byte(content), 0644)
+					if err := os.WriteFile(filepath.Join(postPath, name), []byte(content), 0644); err != nil {
+						t.Fatal(err)
+					}
 				}
 			}
 
@@ -78,7 +82,9 @@ func TestHandleGetPosts(t *testing.T) {
 			}
 
 			var posts []blog.Post
-			json.NewDecoder(rr.Body).Decode(&posts)
+			if err := json.NewDecoder(rr.Body).Decode(&posts); err != nil {
+				t.Errorf("failed to decode response: %v", err)
+			}
 
 			if len(posts) != tt.expectedCount {
 				t.Errorf("expected %d posts, got %d", tt.expectedCount, len(posts))
@@ -95,13 +101,17 @@ func TestHandleGetPosts(t *testing.T) {
 
 func TestHandleDataServing(t *testing.T) {
 	tempDir, _ := os.MkdirTemp("", "datatest")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	testFile := "image.png"
 	testContent := "dummy image content"
 	postDir := filepath.Join(tempDir, "post1")
-	os.MkdirAll(postDir, 0755)
-	os.WriteFile(filepath.Join(postDir, testFile), []byte(testContent), 0644)
+	if err := os.MkdirAll(postDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(postDir, testFile), []byte(testContent), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	s := NewServer(tempDir, 8080)
 	mux := http.NewServeMux()
@@ -153,10 +163,14 @@ func TestHandleReload(t *testing.T) {
 
 func TestSPAHandler(t *testing.T) {
 	tempDir, _ := os.MkdirTemp("", "frontendtest")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
-	os.WriteFile(filepath.Join(tempDir, "index.html"), []byte("<html>index</html>"), 0644)
-	os.WriteFile(filepath.Join(tempDir, "style.css"), []byte("body {}"), 0644)
+	if err := os.WriteFile(filepath.Join(tempDir, "index.html"), []byte("<html>index</html>"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(tempDir, "style.css"), []byte("body {}"), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	s := NewServer(".", 8080)
 	// Inject the mock FS directly
